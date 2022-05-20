@@ -55,28 +55,34 @@ public class ActionsTokenResourceProvider implements RealmResourceProvider {
         }
 
         log.debugf("%s", actionTokenRequest.userId);
-        log.debugf("%s", actionTokenRequest.email);
         log.debugf("%s", actionTokenRequest.redirectUri);
         log.debugf("%s", actionTokenRequest.clientId);
-        log.debugf("%s", actionTokenRequest.requiredActions);
-        log.debugf("%s", actionTokenRequest.checkRedirectUri);
+        log.debugf("%s", actionTokenRequest.actions);
+        log.debugf("%s", actionTokenRequest.redirectUriValidate);
+        log.debugf("%s", actionTokenRequest.lifespan);
 
         KeycloakContext context = session.getContext();
         RealmModel realm = context.getRealm();
+
+        // /auth/admin/master/console/#/realms/master/token-settings User-Initiated Action Lifespan
         int validityInSecs = realm.getActionTokenGeneratedByUserLifespan();
+        if (actionTokenRequest.lifespan != null)
+            validityInSecs = actionTokenRequest.lifespan;
         int absoluteExpirationInSecs = Time.currentTime() + validityInSecs;
 
-        ClientModel client = assertValidClient(actionTokenRequest.clientId, realm);
+        ClientModel client = null;
+        if (actionTokenRequest.clientId != null && actionTokenRequest.redirectUri != null)
+            client = assertValidClient(actionTokenRequest.clientId, realm);
 
-        if (actionTokenRequest.checkRedirectUri)
-            assertValidRedirectUri(actionTokenRequest.redirectUri, client);
+            if (actionTokenRequest.redirectUriValidate != null && actionTokenRequest.redirectUriValidate)
+                assertValidRedirectUri(actionTokenRequest.redirectUri, client);
 
         // Can parameterize this as well
         List<String> requiredActions = new LinkedList<String>();
 
         try {
-            for (int i = 0; i < actionTokenRequest.requiredActions.size(); i++) {
-                String requiredActionName = actionTokenRequest.requiredActions.get(i);
+            for (int i = 0; i < actionTokenRequest.actions.size(); i++) {
+                String requiredActionName = actionTokenRequest.actions.get(i);
                 RequiredAction requiredAction = RequiredAction.valueOf(requiredActionName);
                 requiredActions.add(requiredAction.name());
             }
