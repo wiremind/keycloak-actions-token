@@ -58,7 +58,7 @@ public class ActionsTokenResourceProvider implements RealmResourceProvider {
         log.debugf("%s", actionTokenRequest.email);
         log.debugf("%s", actionTokenRequest.redirectUri);
         log.debugf("%s", actionTokenRequest.clientId);
-        log.debugf("%s", actionTokenRequest.requiredAction);
+        log.debugf("%s", actionTokenRequest.requiredActions);
         log.debugf("%s", actionTokenRequest.checkRedirectUri);
 
         KeycloakContext context = session.getContext();
@@ -73,15 +73,17 @@ public class ActionsTokenResourceProvider implements RealmResourceProvider {
 
         // Can parameterize this as well
         List<String> requiredActions = new LinkedList<String>();
-        RequiredAction requiredAction = null;
+
         try {
-            requiredAction = RequiredAction.valueOf(actionTokenRequest.requiredAction);
+            for (int i = 0; i < actionTokenRequest.requiredActions.size(); i++) {
+                String requiredActionName = actionTokenRequest.requiredActions.get(i);
+                RequiredAction requiredAction = RequiredAction.valueOf(requiredActionName);
+                requiredActions.add(requiredAction.name());
+            }
         } catch (IllegalArgumentException cause) {
             throw new WebApplicationException(
                 ErrorResponse.error("Invalid requiredAction.", Status.BAD_REQUEST));
         }
-
-        requiredActions.add(requiredAction.name());
 
         String token = new ExecuteActionsActionToken(
             actionTokenRequest.userId,
