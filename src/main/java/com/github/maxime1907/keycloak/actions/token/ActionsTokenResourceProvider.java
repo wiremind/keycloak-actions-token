@@ -14,11 +14,11 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
-import com.google.gson.Gson;
-
+import org.keycloak.TokenCategory;
 import org.keycloak.authentication.actiontoken.execactions.ExecuteActionsActionToken;
 import org.keycloak.common.util.Time;
 import org.keycloak.models.ClientModel;
+import org.keycloak.models.Constants;
 import org.keycloak.models.KeycloakContext;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.RealmModel;
@@ -26,6 +26,8 @@ import org.keycloak.models.UserModel.RequiredAction;
 import org.keycloak.protocol.oidc.utils.RedirectUtils;
 import org.keycloak.services.ErrorResponse;
 import org.keycloak.services.resource.RealmResourceProvider;
+
+import com.google.gson.Gson;
 
 import lombok.extern.jbosslog.JBossLog;
 
@@ -64,18 +66,24 @@ public class ActionsTokenResourceProvider implements RealmResourceProvider {
         KeycloakContext context = session.getContext();
         RealmModel realm = context.getRealm();
 
+        if (actionTokenRequest.redirectUri != null && actionTokenRequest.clientId == null) {
+            throw new WebApplicationException(
+                ErrorResponse.error("Client id missing", Status.BAD_REQUEST));
+        }
+
+        if (actionTokenRequest.clientId == null) {
+            actionTokenRequest.clientId = Constants.ACCOUNT_MANAGEMENT_CLIENT_ID;
+        }
+
+        ClientModel client = assertValidClient(actionTokenRequest.clientId, realm);
+        if (actionTokenRequest.redirectUri != null && actionTokenRequest.redirectUriValidate != null && actionTokenRequest.redirectUriValidate)
+            assertValidRedirectUri(actionTokenRequest.redirectUri, client);
+
         // /auth/admin/master/console/#/realms/master/token-settings User-Initiated Action Lifespan
-        int validityInSecs = realm.getActionTokenGeneratedByUserLifespan();
+        int validityInSecs = realm.getActionTokenGeneratedByAdminLifespan();
         if (actionTokenRequest.lifespan != null)
             validityInSecs = actionTokenRequest.lifespan;
         int absoluteExpirationInSecs = Time.currentTime() + validityInSecs;
-
-        ClientModel client = null;
-        if (actionTokenRequest.clientId != null && actionTokenRequest.redirectUri != null)
-            client = assertValidClient(actionTokenRequest.clientId, realm);
-
-            if (actionTokenRequest.redirectUriValidate != null && actionTokenRequest.redirectUriValidate)
-                assertValidRedirectUri(actionTokenRequest.redirectUri, client);
 
         // Can parameterize this as well
         List<String> requiredActions = new LinkedList<String>();
@@ -91,20 +99,27 @@ public class ActionsTokenResourceProvider implements RealmResourceProvider {
                 ErrorResponse.error("Invalid requiredAction.", Status.BAD_REQUEST));
         }
 
-        String token = new ExecuteActionsActionToken(
+        ExecuteActionsActionToken token = new ExecuteActionsActionToken(
             actionTokenRequest.userId,
             absoluteExpirationInSecs,
             requiredActions,
             actionTokenRequest.redirectUri,
             actionTokenRequest.clientId
-        ).serialize(
+        ){
+            @Override
+            public TokenCategory getCategory() {
+                return TokenCategory.ADMIN;
+            }
+        };
+
+        String tokenKey = token.serialize(
             session,
-            context.getRealm(),
+            realm,
             uriInfo
         );
 
         Gson gson = new Gson();
-        ActionToken actionToken = new ActionToken(token);
+        ActionToken actionToken = new ActionToken(tokenKey);
         String jsonInString = gson.toJson(actionToken);
         return Response.status(200).entity(jsonInString).build();
     }
