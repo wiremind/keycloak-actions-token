@@ -46,3 +46,6 @@ Request an action token for a set of specific actions.
 - https://www.janua.fr/action-token-in-keycloak/
 - https://stackoverflow.com/questions/67006007/how-to-generate-and-use-login-action-token-for-keycloak-user-update-profile-in-e
 - https://github.com/keycloak/keycloak/blob/264c5a6cdb2fb86e20536ea4302d20160ca01919/services/src/main/java/org/keycloak/services/resources/admin/UserResource.java#L826
+- https://stackoverflow.com/a/67636834
+- https://github.com/dteleguin/beercloak/blob/master/beercloak-module/src/main/java/beercloak/providers/BeerResourceProvider.java
+- https://github.com/dteleguin/beercloak/blob/master/beercloak-module/src/main/java/beercloak/resources/AbstractAdminResource.java

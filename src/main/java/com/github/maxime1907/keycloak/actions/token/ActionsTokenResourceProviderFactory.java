@@ -8,14 +8,9 @@ import org.keycloak.services.resource.RealmResourceProviderFactory;
 
 public class ActionsTokenResourceProviderFactory implements RealmResourceProviderFactory {
 
-    private ActionsTokenResourceProvider actionsTokenResourceProvider;
-
     @Override
     public RealmResourceProvider create(KeycloakSession keycloakSession) {
-        if (actionsTokenResourceProvider == null) {
-            actionsTokenResourceProvider = new ActionsTokenResourceProvider(keycloakSession);
-        }
-        return actionsTokenResourceProvider;
+        return new ActionsTokenResourceProvider(keycloakSession);
     }
 
     @Override
@@ -34,6 +29,6 @@ public class ActionsTokenResourceProviderFactory implements RealmResourceProvide
 
     @Override
     public String getId() {
-        return "actions-token";
+        return ActionsTokenResourceProvider.ID;
     }
 }
