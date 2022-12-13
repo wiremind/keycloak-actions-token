@@ -1,8 +1,6 @@
 package com.github.maxime1907.keycloak.actions.token;
 
 import org.keycloak.models.KeycloakSession;
-import org.keycloak.services.managers.AppAuthManager;
-import org.keycloak.services.managers.AuthenticationManager.AuthResult;
 import org.keycloak.services.resource.RealmResourceProvider;
 
 
@@ -12,11 +10,9 @@ public class ActionsTokenResourceProvider implements RealmResourceProvider {
     public final static String ID = "actions-token";
 
     private KeycloakSession session;
-    private AuthResult auth;
 
     public ActionsTokenResourceProvider(KeycloakSession session) {
         this.session = session;
-        this.auth = new AppAuthManager.BearerTokenAuthenticator(session).authenticate();
     }
 
     @Override

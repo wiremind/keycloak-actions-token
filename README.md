@@ -49,3 +49,5 @@ Request an action token for a set of specific actions.
 - https://stackoverflow.com/a/67636834
 - https://github.com/dteleguin/beercloak/blob/master/beercloak-module/src/main/java/beercloak/providers/BeerResourceProvider.java
 - https://github.com/dteleguin/beercloak/blob/master/beercloak-module/src/main/java/beercloak/resources/AbstractAdminResource.java
+- https://github.com/keycloak/keycloak/blob/1ed81fa3772220cb8018654e40645f981c934da6/services/src/main/java/org/keycloak/services/resources/admin/AdminRoot.java#L156
+- https://github.com/keycloak/keycloak/blob/264c5a6cdb2fb86e20536ea4302d20160ca01919/services/src/main/java/org/keycloak/services/resources/admin/UsersResource.java#L284
