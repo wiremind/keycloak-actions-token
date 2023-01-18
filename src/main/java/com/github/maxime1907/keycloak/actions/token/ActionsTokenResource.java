@@ -19,6 +19,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
+import org.jboss.logging.Logger;
 import org.jboss.resteasy.annotations.cache.NoCache;
 import org.keycloak.TokenCategory;
 import org.keycloak.authentication.actiontoken.execactions.ExecuteActionsActionToken;
@@ -44,12 +45,11 @@ import org.keycloak.services.resources.admin.permissions.AdminPermissions;
 
 import com.google.gson.Gson;
 
-import lombok.extern.jbosslog.JBossLog;
-
-@JBossLog
 public class ActionsTokenResource {
 
     private final KeycloakSession session;
+
+    private final static Logger logger = Logger.getLogger(ActionsTokenResource.class);
 
     private AdminPermissionEvaluator realmAuth;
 
@@ -182,12 +182,12 @@ public class ActionsTokenResource {
     private ClientModel assertValidClient(String clientId) {
         ClientModel client = session.getContext().getRealm().getClientByClientId(clientId);
         if (client == null) {
-            log.debugf("Client %s doesn't exist", clientId);
+            logger.debugf("Client %s doesn't exist", clientId);
             throw new WebApplicationException(
                 ErrorResponse.error("Client doesn't exist", Status.BAD_REQUEST));
         }
         if (!client.isEnabled()) {
-            log.debugf("Client %s is not enabled", clientId);
+            logger.debugf("Client %s is not enabled", clientId);
             throw new WebApplicationException(
                     ErrorResponse.error("Client is not enabled", Status.BAD_REQUEST));
         }
@@ -219,7 +219,7 @@ public class ActionsTokenResource {
                 .authenticate();
 
         if (authResult == null) {
-            log.debug("Token not valid");
+            logger.debug("Token not valid");
             throw new NotAuthorizedException("Bearer");
         }
 

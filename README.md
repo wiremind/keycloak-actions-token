@@ -8,7 +8,10 @@ mvn clean verify
 ```
 
 ## Deploy the example
-Copy to the `standalone/deployments` directory in Keycloak.
+### Wildfly
+Copy the `.jar` into the keycloak directory `standalone/deployments`
+### Quarkus
+Copy the `.jar` into the keycloak directory `providers`
 
 ## Routes
 
