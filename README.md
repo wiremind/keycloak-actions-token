@@ -16,8 +16,13 @@ Copy the `.jar` into the keycloak directory `providers`
 ## Routes
 
 ### Generate
+#### Wildfly
 ```
 POST /auth/realms/{realm}/actions-token/generate
+```
+#### Quarkus
+```
+POST /realms/{realm}/actions-token/generate
 ```
 
 #### Description
