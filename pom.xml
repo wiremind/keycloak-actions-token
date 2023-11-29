@@ -7,14 +7,14 @@
     <artifactId>actions-token</artifactId>
     <groupId>org.jboss.aerogear</groupId>
     <packaging>jar</packaging>
-    <version>0.0.7</version>
+    <version>0.0.8</version>
 
     <properties>
-        <java.version>11</java.version>
-        <keycloak.version>15.0.2</keycloak.version>
-        <version.compiler.maven.plugin>3.5.1</version.compiler.maven.plugin>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <java.version>17</java.version>
+        <keycloak.version>22.0.5</keycloak.version>
+        <version.compiler.maven.plugin>3.8.1</version.compiler.maven.plugin>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <gson.version>2.9.0</gson.version>
     </properties>
 

@@ -4,20 +4,20 @@ package com.github.maxime1907.keycloak.actions.token;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.ForbiddenException;
-import javax.ws.rs.NotAuthorizedException;
-import javax.ws.rs.NotFoundException;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.UriInfo;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.ForbiddenException;
+import jakarta.ws.rs.NotAuthorizedException;
+import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.WebApplicationException;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
+import jakarta.ws.rs.core.UriInfo;
 
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.annotations.cache.NoCache;
@@ -86,7 +86,7 @@ public class ActionsTokenResource {
         ActionTokenRequest actionTokenRequest = null;
         try {
             Gson gson = new Gson();
-            actionTokenRequest = gson.fromJson(jsonString, ActionTokenRequest.class);        
+            actionTokenRequest = gson.fromJson(jsonString, ActionTokenRequest.class);
         } catch (IllegalArgumentException cause) {
             throw new WebApplicationException(
                 ErrorResponse.error("Invalid json input.", Status.BAD_REQUEST));
@@ -119,7 +119,8 @@ public class ActionsTokenResource {
 
         if (requiredActions.contains(RequiredAction.VERIFY_EMAIL.name()) && user.getEmail() == null)
         {
-            return ErrorResponse.error("User email missing", Status.BAD_REQUEST);
+            throw new WebApplicationException(
+                ErrorResponse.error("User email missing", Status.BAD_REQUEST));
         }
 
         if (!user.isEnabled()) {

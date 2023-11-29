@@ -1,4 +1,4 @@
-FROM maven:3.8.5-jdk-11-slim AS build
+FROM maven:3.8.5-openjdk-17-slim AS build
 
 WORKDIR /home/app/src
 
