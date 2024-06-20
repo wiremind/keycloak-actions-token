@@ -20,7 +20,7 @@ import jakarta.ws.rs.core.Response.Status;
 import jakarta.ws.rs.core.UriInfo;
 
 import org.jboss.logging.Logger;
-import org.jboss.resteasy.annotations.cache.NoCache;
+import org.jboss.resteasy.reactive.NoCache;
 import org.keycloak.TokenCategory;
 import org.keycloak.authentication.actiontoken.execactions.ExecuteActionsActionToken;
 import org.keycloak.common.util.Time;
@@ -76,7 +76,7 @@ public class ActionsTokenResource {
 
         if (!auth.getRealm().equals(realmManager.getKeycloakAdminstrationRealm())
                 && !auth.getRealm().equals(realm)) {
-            throw new org.keycloak.services.ForbiddenException();
+            throw new ForbiddenException();
         }
 
         realmAuth = AdminPermissions.evaluator(session, realm, auth);
