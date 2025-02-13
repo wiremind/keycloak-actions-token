@@ -33,7 +33,7 @@ jobs:
           tags: localhost:5000/name/app:latest
 
       - id: extract
-        uses: shrink/actions-docker-extract@v1
+        uses: shrink/actions-docker-extract@v3
         with:
           image: localhost:5000/name/app:latest
           path: /release/.
