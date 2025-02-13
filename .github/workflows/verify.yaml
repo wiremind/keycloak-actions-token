@@ -1,6 +1,13 @@
 name: Maven Verify
+
 on:
-  pull_request: null
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
 jobs:
   verify:
     runs-on: ubuntu-latest
