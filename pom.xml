@@ -7,11 +7,11 @@
     <artifactId>actions-token</artifactId>
     <groupId>io.wiremind.keycloak.actionstoken</groupId>
     <packaging>jar</packaging>
-    <version>0.0.10</version>
+    <version>0.0.11</version>
 
     <properties>
         <java.version>21</java.version>
-        <keycloak.version>26.0.0</keycloak.version>
+        <keycloak.version>26.4.0</keycloak.version>
         <version.compiler.maven.plugin>3.9.9</version.compiler.maven.plugin>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
