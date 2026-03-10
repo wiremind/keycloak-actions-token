@@ -10,6 +10,9 @@ on:
     branches:
       - master
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -31,14 +34,14 @@ jobs:
           driver-opts: network=host
 
       - name: Build and push to local registry
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: true
           tags: localhost:5000/name/app:latest
 
       - id: extract
-        uses: shrink/actions-docker-extract@v3
+        uses: shrink/actions-docker-extract@v3.1.0
         with:
           image: localhost:5000/name/app:latest
           path: /release/.
@@ -51,25 +54,12 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
-      - name: Create release
-        uses: actions/create-release@v1
+      - name: Create release and upload artifact
         if: startsWith(github.ref, 'refs/tags/')
-        id: create_release
+        uses: softprops/action-gh-release@v2.5.0
         with:
           draft: false
           prerelease: false
-          release_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
           tag_name: ${{ github.ref_name }}
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-
-      - name: Upload release artifact
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{ steps.extract.outputs.destination }}/actions-token-${{github.ref_name}}.jar
-          asset_name: actions-token-${{github.ref_name}}.jar
-          asset_content_type: application/java-archive
+          files: ${{ steps.extract.outputs.destination }}/actions-token-${{ github.ref_name }}.jar
