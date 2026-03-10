@@ -71,7 +71,7 @@ public class ActionsTokenResource {
         RealmManager realmManager = new RealmManager(session);
         if (realm == null) throw new NotFoundException("Realm not found.");
 
-        if (!auth.getRealm().equals(realmManager.getKeycloakAdminstrationRealm())
+        if (!auth.getRealm().equals(realmManager.getRealmByName(org.keycloak.Config.getAdminRealm()))
                 && !auth.getRealm().equals(realm)) {
             throw new ForbiddenException();
         }
