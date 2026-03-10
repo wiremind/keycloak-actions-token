@@ -62,4 +62,4 @@ jobs:
           prerelease: false
           name: ${{ github.ref_name }}
           tag_name: ${{ github.ref_name }}
-          files: ${{ steps.extract.outputs.destination }}/actions-token-${{ github.ref_name }}.jar
+          files: ${{ steps.extract.outputs.destination }}/actions-token-*.jar
