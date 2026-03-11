@@ -47,7 +47,7 @@ jobs:
           path: /release/.
 
       - name: upload build artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: build
           path: ${{ steps.extract.outputs.destination }}/actions-token-*.jar
