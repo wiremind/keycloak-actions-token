@@ -2,6 +2,8 @@
 
 This extension exposes a custom realm resource to manage action tokens in keycloak.
 
+It requires Keycloak 26.5 or later.
+
 ## Build the example
 ```
 mvn clean verify

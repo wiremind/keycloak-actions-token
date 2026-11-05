@@ -227,6 +227,6 @@ public class ActionsTokenResource {
 
         }
 
-        return new AdminAuth(realm, authResult.getToken(), authResult.getUser(), client);
+        return new AdminAuth(realm, authResult.token(), authResult.user(), client);
     }
 }
