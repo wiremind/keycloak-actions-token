@@ -1,0 +1,19 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:best-practices", ":semanticCommits"],
+  "packageRules": [
+    {
+      "groupName": "keycloak",
+      "matchPackageNames": ["org.keycloak:**"]
+    },
+    {
+      "groupName": "maven plugins",
+      "matchManagers": ["maven"],
+      "matchDepTypes": ["build"]
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "semanticCommitType": "ci"
+    }
+  ]
+}
