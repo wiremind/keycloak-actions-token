@@ -11,14 +11,17 @@ public class ActionsTokenResourceProvider implements RealmResourceProvider {
 
     private KeycloakSession session;
 
-    public ActionsTokenResourceProvider(KeycloakSession session) {
+    private final int maxLifespan;
+
+    public ActionsTokenResourceProvider(KeycloakSession session, int maxLifespan) {
         this.session = session;
+        this.maxLifespan = maxLifespan;
     }
 
     @Override
     public Object getResource() {
         // RealmModel realm = session.getContext().getRealm();
-        ActionsTokenResource actionToken = new ActionsTokenResource(this.session);
+        ActionsTokenResource actionToken = new ActionsTokenResource(this.session, this.maxLifespan);
         return actionToken;
     }
 

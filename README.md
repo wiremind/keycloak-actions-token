@@ -45,14 +45,23 @@ Request an action token for a set of specific actions.
 | Path | realm | true | realm name (not id!) | string |
 | Body | user_id | true | User that will be asked to perform a set of required actions | string |
 | Body | actions | true | Required actions the user needs to complete. List of [required actions here](https://www.keycloak.org/docs-api/16.0/javadocs/org/keycloak/models/UserModel.RequiredAction.html) | < string > array |
-| Body | lifespan | false | Number of seconds after which the generated token expires | integer(int32) |
+| Body | lifespan | false | Number of seconds after which the generated token expires. Between 1 and the `max-lifespan` option (default 604800, 7 days). Defaults to the realm admin-initiated action lifespan | integer(int32) |
 | Body | client_id | false | OAuth client the token was issued for. Defaults to the `account` client. | string |
 | Body | redirect_uri | false | If no redirect is given, then there will be no link back to click after actions have completed. Redirect uri must be a valid uri for the particular `client_id` | string |
-| Body | redirect_uri_validate | false | Bypass `redirect_uri` validation checks for the particular `client_id` | boolean |
+| Body | redirect_uri_validate | false | Set to `false` to skip the `redirect_uri` validation for the particular `client_id`. The endpoint validates `redirect_uri` by default | boolean |
 #### Response
 | Type | Name | Required | Description | Schema |
 | :----: | --- | --- | --- | --- |
 | Body | action_token | true | JWT action token signed with the realm's default signature algorithm | string |
+#### Audit
+Each generated token records an admin event: operation `ACTION`, resource `USER`, path `users/{user_id}/actions-token`.
+The realm stores it when admin events are enabled.
+
+#### Options
+| Option | Default | Description |
+| --- | --- | --- |
+| `max-lifespan` | `604800` | Highest `lifespan` a caller can request, in seconds. Set it with `--spi-realm-restapi-extension--actions-token--max-lifespan=<seconds>` |
+
 #### Consumes
 - `application/json`
 #### Produces

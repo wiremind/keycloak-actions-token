@@ -8,13 +8,19 @@ import org.keycloak.services.resource.RealmResourceProviderFactory;
 
 public class ActionsTokenResourceProviderFactory implements RealmResourceProviderFactory {
 
+    // Upper bound of the lifespan a caller can request, in seconds.
+    static final int DEFAULT_MAX_LIFESPAN = 7 * 24 * 3600;
+
+    private int maxLifespan = DEFAULT_MAX_LIFESPAN;
+
     @Override
     public RealmResourceProvider create(KeycloakSession keycloakSession) {
-        return new ActionsTokenResourceProvider(keycloakSession);
+        return new ActionsTokenResourceProvider(keycloakSession, maxLifespan);
     }
 
     @Override
     public void init(Scope scope) {
+        maxLifespan = scope.getInt("max-lifespan", DEFAULT_MAX_LIFESPAN);
     }
 
     @Override
