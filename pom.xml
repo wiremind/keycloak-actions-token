@@ -19,7 +19,7 @@
 
     <properties>
         <java.version>21</java.version>
-        <keycloak.version>26.8.1</keycloak.version>
+        <keycloak.version>26.8.2</keycloak.version>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <gson.version>2.15.0</gson.version>
